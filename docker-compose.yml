@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:5
+    container_name: ai_arch_neo4j
+    ports:
+      - "7474:7474" # Browser
+      - "7687:7687" # Bolt protocol
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    volumes:
+      - ai_arch_neo4j_data:/data
+    networks:
+      - ai_arch_network
+
+  postgres:
+    image: postgres:15
+    container_name: ai_arch_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=ai_arch
+    volumes:
+      - ai_arch_postgres_data:/var/lib/postgresql/data
+    networks:
+      - ai_arch_network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: ai_arch_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=password
+      - POSTGRES_URL=postgresql://postgres:password@postgres:5432/ai_arch
+      - MOCK_LLM=true # Set to use mock LLM instead of real API for now
+    depends_on:
+      - neo4j
+      - postgres
+    volumes:
+      - ./backend:/app
+    networks:
+      - ai_arch_network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+networks:
+  ai_arch_network:
+    driver: bridge
+
+volumes:
+  ai_arch_neo4j_data:
+  ai_arch_postgres_data:
