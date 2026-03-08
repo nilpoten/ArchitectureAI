@@ -39,8 +39,8 @@ graph TD
 
 1. **Clone the repository:**
    ```bash
-   git clone <url> ai-architecture-intelligence
-   cd ai-architecture-intelligence
+   git clone https://github.com/nilpoten/ArchitectureAI/
+   cd ArchitectureAI
    ```
 
 2. **Start the Infrastructure (Neo4j, Postgres, Backend):**
