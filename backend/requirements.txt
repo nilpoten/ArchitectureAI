@@ -1,0 +1,10 @@
+fastapi==0.109.2
+uvicorn
+pydantic<2.0.0
+GitPython==3.1.41
+tree-sitter
+requests==2.31.0
+# We will use the following language bindings for tree-sitter when implementing analysis
+tree-sitter-python==0.21.0
+tree-sitter-javascript==0.21.2
+tree-sitter-java==0.21.0
